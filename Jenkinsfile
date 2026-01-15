@@ -16,9 +16,23 @@ pipeline {
                     npm --version
                     npm ci
                     npm run build
-
-                    
                     '''
                 }
+
                 
+        }
+
+        stage ("test the app") {
+
+            steps{
+
+                sh'''
+                test -f build/index.html && echo "Exists"
+                npm test
+                sss
+                '''
+            }
+
+        
+        
         }}}
