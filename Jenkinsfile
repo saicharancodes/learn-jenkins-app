@@ -21,7 +21,10 @@ pipeline {
 
                 
         }
+
         stage ("run them in parallel"){
+
+            parallel{
 
             stage ("test the app") {
 
@@ -62,7 +65,7 @@ pipeline {
             }        }
 
 
-        }
+        }}
 
         stage("deploy in netlify"){
 
