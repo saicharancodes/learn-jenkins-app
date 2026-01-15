@@ -21,45 +21,48 @@ pipeline {
 
                 
         }
+        stage ("run them in parallel"){
 
-        stage ("test the app") {
+            stage ("test the app") {
 
-            agent {
-                docker{
-                    image 'node:18-alpine'
-                    reuseNode true
+                agent {
+                    docker{
+                        image 'node:18-alpine'
+                        reuseNode true
+                    }}
+
+                steps{
+
+                    sh'''
+                    test -f build/index.html && echo "Exists"
+                    npm test
+                
+                    '''
                 }}
 
-            steps{
+            stage('E2E Testing'){
 
-                sh'''
-                test -f build/index.html && echo "Exists"
-                npm test
-            
-                '''
-            }}
+                agent {
+                    docker{
+                        image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                        reuseNode true
+                    }}
 
-        stage('E2E Testing'){
+                steps{
 
-            agent {
-                docker{
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
-                    reuseNode true
-                }}
+                    sh'''
 
-            steps{
-
-                sh'''
-
-                npm install serve
-                node_modules/.bin/serve -s build &
-                sleep 10
-                npx playwright test
+                    npm install serve
+                    node_modules/.bin/serve -s build &
+                    sleep 10
+                    npx playwright test
 
 
                 '''
             }        }
 
+
+        }
 
         stage("deploy in netlify"){
 
@@ -70,7 +73,7 @@ pipeline {
                 }}
             steps{
                     sh '''
-                        npm install -g netlify-cli
+                        npm install netlify-cli
                         node_modules/.bin/netlify --version
                     '''
                 }
