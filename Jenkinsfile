@@ -1,12 +1,14 @@
 pipeline {
     agent any
 
-    stages {
-
-        environment{
+    environment{
             netlify_project_id = '0a7a2af9-a8e7-471c-b97e-a977982be7cd'
             netlify_auth_token = credentials('netlify-token')
         }
+
+
+    stages {
+
      
         stage ("with the docker") {
             agent {
