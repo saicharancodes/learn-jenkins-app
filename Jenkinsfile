@@ -26,6 +26,7 @@ pipeline {
                 sh ''' 
                  aws --version
                  aws s3 ls
+                 aws s3 cp public\index.html s3://jenkins-frm-local/index.html
                 
                 '''
                 }
