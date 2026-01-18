@@ -7,28 +7,34 @@ pipeline {
         }
 
     stages{
+        
+        stage('Docker image for node18 alphine'){
+
+            steps{
+                sh 'docker build -t node18-local'
+            }
+
+        }
  
         stage("deploy in netlify -- TEST"){
 
             agent {
                 docker{
-                    image 'node:18-alpine'
+                    image 'node18-local'
                     reuseNode true
                     
                 }}
             steps{
                     sh '''
-                        rm -rf node_modules
-                        npm install netlify-cli@20.0.1 node-jq
-                        node_modules/.bin/netlify --version
+                        netlify --version
                         echo 'deploying to production site id - $NETLIFY_SITE_ID '
-                        node_modules/.bin/netlify status
-                        node_modules/.bin/netlify deploy --dir=build --json > deploy-output.json
-                        node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json
+                        netlify status
+                        netlify deploy --dir=build --json > deploy-output.json
+                        node-jq -r '.deploy_url' deploy-output.json
                     '''
                     script { 
 
-                        env.staging_site_id = sh (script:"node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json", returnStdout: true)
+                        env.staging_site_id = sh (script:"node-jq -r '.deploy_url' deploy-output.json", returnStdout: true)
                     }
                 }
         }
@@ -63,16 +69,16 @@ pipeline {
 
             agent {
                 docker{
-                    image 'node:18-alpine'
+                    image 'node18-local'
                     reuseNode true
                 }}
             steps{
                     sh '''
                         npm install netlify-cli@20.0.1
-                        node_modules/.bin/netlify --version
+                        netlify --version
                         echo 'deploying to production site id - $NETLIFY_SITE_ID '
-                        node_modules/.bin/netlify status
-                        node_modules/.bin/netlify deploy --dir=build --prod
+                        netlify status
+                        netlify deploy --dir=build --prod
                     '''
                 }
         }
