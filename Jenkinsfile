@@ -5,6 +5,7 @@ pipeline {
             NETLIFY_SITE_ID = '0a7a2af9-a8e7-471c-b97e-a977982be7cd'
             NETLIFY_AUTH_TOKEN = credentials('netlify-token')
         }
+    stages{
  
         stage("deploy in netlify -- TEST"){
 
@@ -74,6 +75,6 @@ pipeline {
         }
         
         
-        }}
+    }}     
 
 
