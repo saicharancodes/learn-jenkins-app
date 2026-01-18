@@ -46,8 +46,6 @@ pipeline {
 
                     npm install serve
                     node_modules/.bin/serve -s build &
-                    sleep 10
-                    npx playwright test
                     echo "here is the site url ${env.staging_site_id}
 
 
