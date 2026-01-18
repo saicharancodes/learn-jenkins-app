@@ -6,6 +6,7 @@ pipeline {
             NETLIFY_AUTH_TOKEN = credentials('netlify-token')
         }
 
+    stages{
  
         stage("deploy in netlify -- TEST"){
 
@@ -74,6 +75,6 @@ pipeline {
         }
         
         
-        }
+        }}
 
 
