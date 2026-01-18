@@ -5,16 +5,6 @@ pipeline {
             NETLIFY_SITE_ID = '0a7a2af9-a8e7-471c-b97e-a977982be7cd'
             NETLIFY_AUTH_TOKEN = credentials('netlify-token')
         }
-
-    stages{
-        
-        stage('Docker image for node18 alphine'){
-
-            steps {
-                sh 'docker build -t node18-local .'
-            }
-
-        }
  
         stage("deploy in netlify -- TEST"){
 
