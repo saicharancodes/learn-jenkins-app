@@ -46,7 +46,7 @@ pipeline {
 
                     npm install serve
                     node_modules/.bin/serve -s build &
-                    echo "here is the site url ${env.staging_site_id}
+                    echo "here is the site url ${env.staging_site_id}"
 
 
                 '''
