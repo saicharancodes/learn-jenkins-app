@@ -11,7 +11,7 @@ pipeline {
         stage('Docker image for node18 alphine'){
 
             steps{
-                sh 'docker build -t node18-local'
+                sh 'docker build -t node18-local .'
             }
 
         }
