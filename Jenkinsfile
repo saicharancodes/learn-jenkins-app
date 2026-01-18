@@ -74,7 +74,35 @@ pipeline {
 
         }}
 
-        stage("deploy in netlify"){
+        stage("deploy in netlify -- TEST"){
+
+            agent {
+                docker{
+                    image 'node:18-alpine'
+                    reuseNode true
+                }}
+            steps{
+                    sh '''
+                        npm install netlify-cli@20.0.1
+                        node_modules/.bin/netlify --version
+                        echo 'deploying to production site id - $NETLIFY_SITE_ID '
+                        node_modules/.bin/netlify status
+                        node_modules/.bin/netlify deploy --dir=build
+                    '''
+                }
+        }
+
+
+        stage('approval') {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                input message: 'yes', ok: 'yes i am sure'
+                        }
+
+            }
+        }
+
+        stage("deploy in netlify -- PROD"){
 
             agent {
                 docker{
