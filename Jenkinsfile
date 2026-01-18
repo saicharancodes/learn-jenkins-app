@@ -27,7 +27,7 @@ pipeline {
                     '''
                     script { 
 
-                        env.staging_site_id = sh ("node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json", returnStdout: true)
+                        env.staging_site_id = sh (script:"node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json", returnStdout: true)
                     }
                 }
         }
