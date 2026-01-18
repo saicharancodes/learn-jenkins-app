@@ -6,11 +6,9 @@ pipeline {
             NETLIFY_AUTH_TOKEN = credentials('netlify-token')
         }
 
+ 
+        stage("deploy in netlify -- TEST"){
 
-    stages {
-
-     
-        stage ("with the docker") {
             agent {
                 docker{
                     image 'node:18-alpine'
@@ -18,39 +16,16 @@ pipeline {
                 }}
             steps{
                     sh '''
-                    ls -la
-                    node --version
-                    npm --version
-                    npm ci
-                    npm run build
+                        npm install netlify-cli@20.0.1
+                        node_modules/.bin/netlify --version
+                        echo 'deploying to production site id - $NETLIFY_SITE_ID '
+                        node_modules/.bin/netlify status
+                        node_modules/.bin/netlify deploy --dir=build
                     '''
                 }
-
-                
         }
 
-        stage ("run them in parallel"){
-
-            parallel{
-
-            stage ("test the app") {
-
-                agent {
-                    docker{
-                        image 'node:18-alpine'
-                        reuseNode true
-                    }}
-
-                steps{
-
-                    sh'''
-                    test -f build/index.html && echo "Exists"
-                    npm test
-                
-                    '''
-                }}
-
-            stage('E2E Testing'){
+        stage('E2E Testing'){
 
                 agent {
                     docker{
@@ -70,28 +45,6 @@ pipeline {
 
                 '''
             }        }
-
-
-        }}
-
-        stage("deploy in netlify -- TEST"){
-
-            agent {
-                docker{
-                    image 'node:18-alpine'
-                    reuseNode true
-                }}
-            steps{
-                    sh '''
-                        npm install netlify-cli@20.0.1
-                        node_modules/.bin/netlify --version
-                        echo 'deploying to production site id - $NETLIFY_SITE_ID '
-                        node_modules/.bin/netlify status
-                        node_modules/.bin/netlify deploy --dir=build
-                    '''
-                }
-        }
-
 
         stage('approval') {
             steps {
@@ -121,8 +74,6 @@ pipeline {
         }
         
         
-        
-        
-        }}
+        }
 
 
