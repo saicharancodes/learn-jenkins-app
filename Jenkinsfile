@@ -23,7 +23,12 @@ pipeline {
                         echo 'deploying to production site id - $NETLIFY_SITE_ID '
                         node_modules/.bin/netlify status
                         node_modules/.bin/netlify deploy --dir=build --json > deploy-output.json
+                        node_modules/.bin/node-jq -r 'deploy_url' deploy-output.json
                     '''
+                    script { 
+
+                        env.staging_site_id = sh ("node_modules/.bin/node-jq -r 'deploy_url' deploy-output.json", returnStdout: true)
+                    }
                 }
         }
 
@@ -43,6 +48,7 @@ pipeline {
                     node_modules/.bin/serve -s build &
                     sleep 10
                     npx playwright test
+                    echo "here is the site url ${env.staging_site_id}
 
 
                 '''
