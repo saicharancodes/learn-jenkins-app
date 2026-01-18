@@ -18,6 +18,7 @@ pipeline {
                 }}
             steps{
                     sh '''
+                        rm -rf node_modules
                         npm install netlify-cli@20.0.1 node-jq
                         node_modules/.bin/netlify --version
                         echo 'deploying to production site id - $NETLIFY_SITE_ID '
