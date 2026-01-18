@@ -43,7 +43,7 @@ pipeline {
 
                 agent {
                     docker{
-                        image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                        image 'node18-local'
                         reuseNode true
                     }}
 
@@ -74,7 +74,7 @@ pipeline {
                 }}
             steps{
                     sh '''
-                        npm install netlify-cli@20.0.1
+                        
                         netlify --version
                         echo 'deploying to production site id - $NETLIFY_SITE_ID '
                         netlify status
